@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.coupon.mapper.TCouponInfoMapper">
+    
+    <resultMap type="TCouponInfo" id="TCouponInfoResult">
+        <result property="id"    column="id"    />
+        <result property="couponNo"    column="coupon_no"    />
+        <result property="couponPwd"    column="coupon_pwd"    />
+        <result property="couponStatus"    column="coupon_status"    />
+        <result property="expressNo"    column="express_no"    />
+        <result property="telNo"    column="tel_no"    />
+        <result property="address"    column="address"    />
+        <result property="name"    column="name"    />
+        <result property="annex"    column="annex"    />
+        <result property="desc"    column="desc"    />
+    </resultMap>
+
+    <sql id="selectTCouponInfoVo">
+        select id, coupon_no, coupon_pwd, coupon_status, express_no, tel_no, address, name, annex, desc from t_coupon_info
+    </sql>
+
+    <select id="selectTCouponInfoList" parameterType="TCouponInfo" resultMap="TCouponInfoResult">
+        <include refid="selectTCouponInfoVo"/>
+        <where>  
+            <if test="couponNo != null  and couponNo != ''"> and coupon_no = #{couponNo}</if>
+            <if test="couponStatus != null  and couponStatus != ''"> and coupon_status = #{couponStatus}</if>
+            <if test="expressNo != null  and expressNo != ''"> and express_no = #{expressNo}</if>
+            <if test="telNo != null  and telNo != ''"> and tel_no = #{telNo}</if>
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTCouponInfoById" parameterType="Long" resultMap="TCouponInfoResult">
+        <include refid="selectTCouponInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTCouponInfo" parameterType="TCouponInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_coupon_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponNo != null and couponNo != ''">coupon_no,</if>
+            <if test="couponPwd != null">coupon_pwd,</if>
+            <if test="couponStatus != null">coupon_status,</if>
+            <if test="expressNo != null">express_no,</if>
+            <if test="telNo != null">tel_no,</if>
+            <if test="address != null">address,</if>
+            <if test="name != null">name,</if>
+            <if test="annex != null">annex,</if>
+            <if test="desc != null">desc,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponNo != null and couponNo != ''">#{couponNo},</if>
+            <if test="couponPwd != null">#{couponPwd},</if>
+            <if test="couponStatus != null">#{couponStatus},</if>
+            <if test="expressNo != null">#{expressNo},</if>
+            <if test="telNo != null">#{telNo},</if>
+            <if test="address != null">#{address},</if>
+            <if test="name != null">#{name},</if>
+            <if test="annex != null">#{annex},</if>
+            <if test="desc != null">#{desc},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTCouponInfo" parameterType="TCouponInfo">
+        update t_coupon_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponNo != null and couponNo != ''">coupon_no = #{couponNo},</if>
+            <if test="couponPwd != null">coupon_pwd = #{couponPwd},</if>
+            <if test="couponStatus != null">coupon_status = #{couponStatus},</if>
+            <if test="expressNo != null">express_no = #{expressNo},</if>
+            <if test="telNo != null">tel_no = #{telNo},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="annex != null">annex = #{annex},</if>
+            <if test="desc != null">desc = #{desc},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTCouponInfoById" parameterType="Long">
+        delete from t_coupon_info where id = #{id}
+    </delete>
+
+    <delete id="deleteTCouponInfoByIds" parameterType="String">
+        delete from t_coupon_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
